@@ -1,34 +1,15 @@
-import { GoogleGenAI, Type, Modality, GenerateContentResponse } from "@google/genai";
+import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { Concept } from '../types';
 
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+let ai: GoogleGenAI | null = null;
+
+if (apiKey) {
+    ai = new GoogleGenAI({ apiKey });
+} else {
+    console.warn('API key not configured - AI features will be disabled');
 }
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-// Helper function to retry API calls on rate limit errors
-const apiCallWithRetry = async <T>(apiCall: () => Promise<T>, maxRetries = 3): Promise<T> => {
-    let attempt = 0;
-    while (attempt < maxRetries) {
-        try {
-            return await apiCall();
-        } catch (error: any) {
-            attempt++;
-            // Check for 429 Resource Exhausted error
-            if (error.message?.includes('429') && error.message?.includes('RESOURCE_EXHAUSTED') && attempt < maxRetries) {
-                console.warn(`Rate limit exceeded. Retrying in ${2 ** attempt}s... (Attempt ${attempt}/${maxRetries})`);
-                await new Promise(resolve => setTimeout(resolve, (2 ** attempt) * 1000));
-            } else {
-                // For other errors or if max retries are reached, throw the error
-                throw error;
-            }
-        }
-    }
-    // This line should not be reachable, but as a fallback:
-    throw new Error("API call failed after multiple retries.");
-};
-
 
 const fileToGenerativePart = async (file: File) => {
     const base64EncodedDataPromise = new Promise<string>((resolve) => {
@@ -52,6 +33,10 @@ const fileToTextPart = async (file: File) => {
 }
 
 export const generateVisual = async (prompt: string): Promise<string> => {
+    if (!ai) {
+        throw new Error("AI features are not available - API key not configured");
+    }
+
     try {
         const enhancedPrompt = `
             Task: Generate a technical diagram for the concept: "${prompt}".
@@ -70,8 +55,7 @@ export const generateVisual = async (prompt: string): Promise<string> => {
             - Prohibited subjects to draw: mermaids, cars, trees, people, animals, buildings. The output must be purely abstract and informational.
         `;
 
-        // Fix: Explicitly type the response as GenerateContentResponse
-        const response: GenerateContentResponse = await apiCallWithRetry(() => ai.models.generateContent({
+        const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash-image',
             contents: {
                 parts: [{ text: enhancedPrompt }],
@@ -79,7 +63,7 @@ export const generateVisual = async (prompt: string): Promise<string> => {
             config: {
                 responseModalities: [Modality.IMAGE],
             },
-        }));
+        });
 
         const firstCandidate = response.candidates?.[0];
         const firstPart = firstCandidate?.content?.parts?.[0];
@@ -94,9 +78,6 @@ export const generateVisual = async (prompt: string): Promise<string> => {
     } catch (error) {
         console.error("Error generating visual:", error);
         if (error instanceof Error) {
-            if (error.message.includes('RESOURCE_EXHAUSTED')) {
-                throw new Error("Diagram generation failed due to API rate limits. Please wait a moment and try again.");
-            }
             throw new Error(`Failed to generate visual from AI: ${error.message}`);
         }
         throw new Error("Failed to generate visual from AI.");
@@ -104,6 +85,10 @@ export const generateVisual = async (prompt: string): Promise<string> => {
 };
 
 export const generateLesson = async (topic: string, files: File[], notes: string): Promise<Concept[]> => {
+    if (!ai) {
+        throw new Error("AI features are not available - API key not configured");
+    }
+
     const textFiles = files.filter(f => f.type.startsWith('text/') || /\.(java|py|js|ts|html|css|json|md|c|cpp|cs)$/i.test(f.name));
     const imageFiles = files.filter(f => f.type.startsWith('image/'));
 
@@ -131,8 +116,7 @@ export const generateLesson = async (topic: string, files: File[], notes: string
     `;
 
     try {
-        // Fix: Explicitly type the response as GenerateContentResponse
-        const response: GenerateContentResponse = await apiCallWithRetry(() => ai.models.generateContent({
+        const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: {
                 parts: [{ text: prompt }, ...imageParts]
@@ -158,7 +142,7 @@ export const generateLesson = async (topic: string, files: File[], notes: string
                     }
                 }
             }
-        }));
+        });
         
         const jsonText = response.text.trim();
         const parsed = JSON.parse(jsonText);
@@ -167,19 +151,17 @@ export const generateLesson = async (topic: string, files: File[], notes: string
 
     } catch (error) {
         console.error("Error generating lesson:", error);
-        if (error instanceof Error) {
-            if (error.message.includes('RESOURCE_EXHAUSTED')) {
-                throw new Error("API rate limit exceeded. Please wait a few moments and try again.");
-            }
-        }
         throw new Error("Failed to generate lesson from AI. Please check the console for details.");
     }
 };
 
 export const generateSpeech = async (text: string): Promise<string> => {
+    if (!ai) {
+        throw new Error("AI features are not available - API key not configured");
+    }
+
     try {
-        // Fix: Explicitly type the response as GenerateContentResponse
-        const response: GenerateContentResponse = await apiCallWithRetry(() => ai.models.generateContent({
+        const response = await ai.models.generateContent({
             model: "gemini-2.5-flash-preview-tts",
             contents: [{ parts: [{ text: text }] }],
             config: {
@@ -190,8 +172,7 @@ export const generateSpeech = async (text: string): Promise<string> => {
                     },
                 },
             },
-        }));
-
+        });
         const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
         if (!audioData) {
             throw new Error("No audio data returned from API.");
@@ -200,9 +181,6 @@ export const generateSpeech = async (text: string): Promise<string> => {
     } catch (error) {
         console.error("Error generating speech:", error);
         if (error instanceof Error) {
-             if (error.message.includes('RESOURCE_EXHAUSTED')) {
-                throw new Error("Audio generation failed due to API rate limits. Please try again in a moment.");
-            }
             throw new Error(`Failed to generate speech from AI: ${error.message}`);
         }
         throw new Error("Failed to generate speech from AI.");
@@ -214,6 +192,10 @@ export const chatWithBot = async (
     lesson: any,
     userMessage: string
 ) => {
+    if (!ai) {
+        throw new Error("AI features are not available - API key not configured");
+    }
+    
     const chat = ai.chats.create({
         model: 'gemini-2.5-flash',
         config: {
