@@ -51,9 +51,12 @@ export const TrashIcon = ({ className = 'w-6 h-6' }: { className?: string }) => 
 
 export const LogoIcon = ({ className = 'w-6 h-6' }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={className}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.03 1.121 0 1.131.094 1.976 1.057 1.976 2.192V7.5M8.25 7.5h7.5m-7.5 0-1 4.5m7.5 0-1-4.5m-4.5 0v7.5m0 0-1 4.5m1-4.5h.008m0 0h.008m0 0h.008m2.086 0-1-4.5m1 4.5h.008m0 0h.008m0 0h.008M10 1.5a9 9 0 1 0 4 17.585l-4-4.5-4 4.5A9 9 0 0 0 10 1.5Z" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 7.5l-3.75 4.5 3.75 4.5" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 7.5l3.75 4.5-3.75 4.5" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
   </svg>
 );
+
 
 export const CodeIcon = ({ className = 'w-6 h-6' }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>

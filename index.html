@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CS Lesson Architect</title>
+    <title>Claricode</title>
     <script type="importmap">
 {
   "imports": {
@@ -12,7 +12,9 @@
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "jspdf": "https://aistudiocdn.com/jspdf@^3.0.3"
+    "jspdf": "https://aistudiocdn.com/jspdf@^3.0.3",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.0",
+    "vite": "https://aistudiocdn.com/vite@^7.1.12"
   }
 }
 </script>
@@ -24,6 +26,18 @@
     }
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+      if (typeof tailwind !== 'undefined') {
+        tailwind.config = {
+          darkMode: 'class',
+          theme: {
+            extend: {}
+          }
+        };
+      } else {
+        console.warn("Tailwind not loaded yet. If using production, consider installing Tailwind locally.");
+      }
+    </script>
 <style>
   @keyframes fade-in-up {
     from {
@@ -216,6 +230,34 @@
   html.dark .bg-gray-900.border.border-gray-600 {
       background-color: #212121 !important;
       border-color: #4A4A4A !important;
+  }
+
+  /* Landing Page Aura Effect */
+  .landing-page {
+    position: relative;
+    overflow: hidden;
+  }
+  .landing-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: radial-gradient(
+        400px circle at var(--mouse-x, -100px) var(--mouse-y, -100px),
+        rgba(59, 130, 246, 0.15), /* Tailwind blue-500 with opacity */
+        transparent 80%
+    );
+    transition: background 0.2s ease-out;
+  }
+  html.dark .landing-page::before {
+    background: radial-gradient(
+        500px circle at var(--mouse-x, -100px) var(--mouse-y, -100px),
+        rgba(139, 92, 246, 0.1), /* Tailwind violet-500 with opacity */
+        transparent 80%
+    );
   }
 
 

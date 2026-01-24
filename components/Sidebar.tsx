@@ -1,3 +1,5 @@
+
+
 import React, { useState } from 'react';
 import { Folder, Lesson } from '../types';
 import { FolderIcon, FileIcon, PlusIcon, PencilIcon } from './Icons';
@@ -65,9 +67,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside className="w-72 bg-gray-100 text-gray-800 dark:bg-[#212121] dark:text-gray-200 flex flex-col h-full border-r border-gray-300 dark:border-[#4A4A4A]">
       <div className="p-4 border-b border-gray-300 dark:border-[#4A4A4A]">
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white">CS Lesson Architect</h1>
-      </div>
-      <div className="p-4">
         <button
           onClick={onNewLesson}
           className="w-full flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
@@ -94,7 +93,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     autoFocus
                     className="flex-1 bg-white text-gray-900 text-sm rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-[#333333] dark:text-gray-200 dark:border-[#4A4A4A]"
                     onKeyDown={(e) => e.key === 'Enter' && handleAddFolder()}
-                    onBlur={() => setShowInput(false)}
                 />
                 <button onClick={handleAddFolder} className="px-2 py-1 text-sm bg-blue-600 rounded hover:bg-blue-700">Add</button>
             </div>
