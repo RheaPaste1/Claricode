@@ -73,8 +73,8 @@ Building Claricode was also our first experience working extensively with techno
 Clone the repository:
 
 ```bash
-git clone https://github.com/RheaPaste1/Ember-Hacks.git
-cd Ember-Hacks
+git clone https://github.com/RheaPaste1/Claricode.git
+cd Claricode
 ```
 
 Install dependencies:
