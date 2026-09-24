@@ -1,4 +1,4 @@
-[demo.htm](https://github.com/user-attachments/files/32619352/demo.htm)# Claricode
+# Claricode
 
 **Turn scattered course materials into structured, interactive lessons.**
 
