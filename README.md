@@ -7,7 +7,9 @@ Claricode is an AI-powered study tool that helps computer science students make 
 We built Claricode after running into a problem ourselves: a professor would provide collections of Java files as lecture material, but understanding how the files related to each other could take hours. We wanted to build something that could take those scattered materials and turn them into a structured learning experience.
 
 → [Try the live app](https://claricode.netlify.app/) · [Devpost](https://devpost.com/software/claricode)
-![Claricode Demo]([PASTE_THE_GIF_URL_HERE](https://github.com/ShreyaSirgound/Claricode/raw/main/demo.gif))
+<div align="center">
+  <img src="assets/demo.gif" alt="Claricode demo" width="850">
+</div>
 
 ## What it does
 
