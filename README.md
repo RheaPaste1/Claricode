@@ -15,7 +15,7 @@ We built Claricode after running into a problem ourselves: a professor would pro
 
 ### Structured Lessons
 
-Upload course materials and Claricode organizes them into cohesive lessons with explanations and examples designed to make the relationships between concepts easier to understand.
+Upload course materials and Claricode organizes them into cohesive, reviewable lessons with definitions, annotated code snippets, explanations, and examples.
 
 It supports a wide range of inputs, including:
 
@@ -24,11 +24,13 @@ It supports a wide range of inputs, including:
 * Images
 * Other course materials
 
+Generated lessons can also be customized with inline notes and highlighting.
+
 ### Context-Aware AI Tutor
 
 Students can ask questions about their uploaded material and receive answers grounded in that material.
 
-Rather than acting as a general-purpose chatbot, the tutor is designed to stay within the context provided by the student.
+Rather than acting as a general-purpose chatbot, the tutor is embedded alongside the lesson so students can ask questions without losing their place or context.
 
 ### Accessibility
 
@@ -40,9 +42,9 @@ Claricode includes features designed to make the generated material easier to ac
 
 ## How It Works
 
-At a high level, Claricode takes the student's course materials as input, processes them using the Gemini API, and turns them into structured lessons and examples that can be explored through the application.
+At a high level, Claricode takes the student's course materials as input, processes them using the Gemini API, and turns them into structured lessons and examples that can be explored and personalized through the application.
 
-The project uses a combination of React Native, TypeScript, Python, and CSS, with Gemini providing the AI capabilities.
+The application is built with React and TypeScript, using Vite and Tailwind CSS for the frontend. Generated lessons can be exported as PDFs using jsPDF, and the application is deployed through Netlify.
 
 ## Building with AI
 
@@ -60,11 +62,10 @@ Building Claricode was also our first experience working extensively with techno
 
 ## Tech Stack
 
-* **TypeScript**
-* **React Native**
-* **Python**
-* **CSS**
-* **Gemini API**
+* Frontend: React · TypeScript · Vite · Tailwind CSS
+* AI: Google Gemini API
+* Export: jsPDF
+* Deployment: Netlify
 
 ## Running Locally
 
@@ -102,7 +103,7 @@ npm run dev
 
 ## The Team
 
-Claricode was built collaboratively for **EmberHacks 2025**. We worked together across the project, from developing the application to figuring out how to make the AI-generated content useful and reliable for students.
+Claricode was built collaboratively by **Rhea Paste** and [**Shreya Sirgound**](https://github.com/ShreyaSirgound) for EmberHacks 2025. We worked together across the project, from developing the application to figuring out how to make the AI-generated content useful and reliable for students.
 
 ---
 
